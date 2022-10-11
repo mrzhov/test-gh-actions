@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '17'
-      - run: yarn
+      - run: npm install
       - run: npm run build
   copy:
     needs: build
