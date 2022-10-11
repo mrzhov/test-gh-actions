@@ -22,6 +22,7 @@ jobs:
       - run: npm run build
       - run: ls
       - run: cp dist/test.json docs/test.json
+      - run: ls docs
   deploy:
     needs: build
     environment:
