@@ -24,7 +24,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: ${{ github.workspace }}
+      - run: ls ${{ github.workspace }}
   deploy:
     needs: [build, copy]
     environment:
