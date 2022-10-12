@@ -1,4 +1,4 @@
-name: 'Deploy to github-pages'
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -6,45 +6,34 @@ on:
       - main
 
 permissions:
-  contents: read
-  pages: write
   id-token: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '17'
-      - run: npm install
-      - run: npm run build
-      - run: ls
-      - run: cp dist/test.json docs/test.json
-      - run: ls docs
   deploy:
-    needs: build
+    name: Deploy
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+
+      - name: Build app
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 17
+      - run: npm install
+      - run: npm run build
+
+      - name: Copy test.json
+      - run: cp dist/test.json docs/test.json
+
       - name: Setup Pages
-        uses: actions/configure-pages@v2
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - uses: actions/configure-pages@v2
+      - uses: actions/upload-pages-artifact@v1
         with:
           path: './docs'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
-  check:
-    needs: [build, deploy]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: ls
-      - run: ls docs
